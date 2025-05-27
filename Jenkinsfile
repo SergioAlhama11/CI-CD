@@ -5,7 +5,7 @@ pipeline {
         stage('Build'){
             steps {
                 echo 'Construyendo la app...'
-                git 'https://github.com/SergioAlhama11/CI-CD.git'
+                git branch: 'main', url: 'https://github.com/SergioAlhama11/CI-CD.git'
             }
         }
 
