@@ -2,29 +2,33 @@ pipeline {
     agent {
         docker {
             image 'maven:3.8.5-openjdk-17'
+            args '-v /var/run/docker.sock:/var/run/docker.sock' // Para poder usar Docker dentro del contenedor si necesitas
         }
     }
 
     stages {
-        stage('Build'){
+        stage('Build') {
             steps {
                 echo 'Construyendo la app...'
-                git branch: 'main', url: 'https://github.com/SergioAlhama11/CI-CD.git'
+                // El código ya está clonado por Jenkins desde el SCM configurado en el job
+                sh 'mvn clean package -DskipTests'
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Ejecutando tests...'
-                sh 'mvn clean package -DskipTests'
+                // Aquí podrías ejecutar tests reales si quieres
+                sh 'mvn test'
             }
         }
 
-        stage('Deploy'){
+        stage('Deploy') {
             steps {
                 echo 'Desplegando app en Raspberry Pi...'
-                
+
                 sh '''
+                # Matar proceso en puerto 8080 si existe
                 if lsof -ti:8080 | grep -q .; then
                     kill $(lsof -ti:8080)
                 fi
