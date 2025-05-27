@@ -3,15 +3,21 @@ pipeline {
 
     stages {
         stage('Build'){
-            echo 'Construyendo la app...'
+            steps {
+                echo 'Construyendo la app...'
+            }
         }
 
         stage('Test') {
-            echo 'Ejecutando tests...'
+            steps {
+                echo 'Ejecutando tests...'
+            }
         }
 
         stage('Deploy'){
-            echo 'Desplegando app en Raspberry Pi...'
+            steps {
+                echo 'Desplegando app en Raspberry Pi...'
+            }
         }
     }
 }
