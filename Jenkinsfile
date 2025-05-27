@@ -13,6 +13,13 @@ pipeline {
                 checkout scm  // Esto clona el repo en el nodo Jenkins
             }
         }
+
+        stage('Check workspace') {
+            steps {
+                sh 'pwd'
+                sh 'ls -la'
+            }
+        }
         
         stage('Build') {
             steps {
