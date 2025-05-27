@@ -1,11 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'maven:3.8.5-openjdk-17'
-            args '-v /var/run/docker.sock:/var/run/docker.sock' // Para poder usar Docker dentro del contenedor si necesitas
-        }
-    }
-
+    agent any
     stages {
 
         stage('Clean Workspace') {
@@ -13,10 +7,23 @@ pipeline {
                 cleanWs()
             }
         }
+
+        stage('Checkout') {
+            steps {
+                checkout scm  // Esto clona el repo en el nodo Jenkins
+            }
+        }
         
         stage('Build') {
             steps {
                 echo 'Construyendo la app...'
+                agent {
+                    docker {
+                        image 'maven:3.8.5-openjdk-17'
+                        args '-v /var/run/docker.sock:/var/run/docker.sock' // Para poder usar Docker dentro del contenedor si necesitas
+                    }
+                }
+
                 // El código ya está clonado por Jenkins desde el SCM configurado en el job
                 sh 'mvn clean package -DskipTests'
             }
